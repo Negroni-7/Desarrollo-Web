@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viña Urbana - Vinos Boutique</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<body>  
+    <!------------------- Navbar -------------------->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container"> <!----- para alinear la barra con el contenido-->
+
+            <!----- titulo y boton interctvo-->
+            <a class="navbar-brand" href="#">Viña Urbana</a> 
+
+            <!--- boton para que sea responsive-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Desplegar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!--- otros botones del menu-->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#catalogo">Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#recomendados">Recomendaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#nosotros">Nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#degustaciones">Degustaciones y Maridaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#contacto">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Botones de carrito y usuario -->
+            <div class="d-flex ms-3 align-items-center">
+                <button class="btn btn-outline-light position-relative me-2" id="btnCart" onclick="abrirCarrito()">
+                    <i class="bi bi-cart3"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+                </button>
+                <button class="btn btn-outline-light" id="btnUser" onclick="abrirUsuario()">
+                    <i class="bi bi-person"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!------------------- Hero Section -------------------->
+    <section class="hero-section">
+        <div class="container">
+            <h1> Viña Urbana</h1>
+            <p class ="lead mb-4"> Descubre vinos boutique de productores artesanales chilenos</p>
+            <p class="lead mb-5"> Ediciones limitadas, sabores únicos, experiencias inolvidables</p>
+            <a href="#catalogo" class="btn btn-acento btn-lg me-3">Explorar Vinos</a>
+            <a href="#nosotros" class="btn btn-outline-light btn-lg">Conocer Más</a>
+        </div>
+    </section>
+
+
+
+    <!-------------------- FILTROS ---------------------->
+    <section class="py-4 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-acento active filter-btn" data-filter="todos" onclick="filtrarVinos('todos', this)">
+                            <i class="bi bi-grid me-2"></i>Todos
+                        </button>
+                        <button class="btn btn-outline-secondary filter-btn" data-filter="tinto" onclick="filtrarVinos('tinto', this)">
+                            <i class="bi bi-droplet me-2"></i>Tintos
+                        </button>
+                        <button class="btn btn-outline-secondary filter-btn" data-filter="blanco" onclick="filtrarVinos('blanco', this)">
+                            <i class="bi bi-droplet-half me-2"></i>Blancos
+                        </button>
+                        <button class="btn btn-outline-secondary filter-btn" data-filter="rosado" onclick="filtrarVinos('rosado', this)">
+                            <i class="bi bi-droplet me-2"></i>Rosados
+                        </button>
+                        <button class="btn btn-outline-secondary filter-btn" data-filter="especial" onclick="filtrarVinos('especial', this)">
+                            <i class="bi bi-star me-2"></i>Especiales
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-----------------------CATÁLOGO ------------------------>
+    <section id="catalogo" class="py-5">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Nuestros Vinos</h2>
+
+            <div class="row g-4">
+
+                <!-- Tarjeta 1 kuyen tinto -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="tinto">
+                    <div class="card h-100">
+                        <img src="images/vinos/kuyen-tinto.jpg" class="card-img-top" alt="Kuyen">
+                        <div class="card-body">
+                            <span class="badge bg-danger mb-2">Tinto</span>
+                            <h5 class="card-title">Kuyen (blend tinto)</h5>
+                            <p class="card-text text-muted">Viña Antiyal - 750ml - 14.5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$32.000</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Kuyen (blend tinto)" data-precio="32000" data-imagen="images/vinos/kuyen-tinto.jpg">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2  pinot rosado-->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="rosado">
+                    <div class="card h-100">
+                        <img src="images/vinos/pinot-rosado.jpg" class="card-img-top" alt="Pinot Noir Rosé">
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">Rosado</span>
+                            <h5 class="card-title">Pinot Noir Rosé</h5>
+                            <p class="card-text text-muted">Viña Leyda - 750ml - 12,5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$16.900</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Pinot Noir Rosé" data-precio="16900" data-imagen="images/vinos/pinot-rosado.jpg">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3 pura fe tinto -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="tinto">
+                    <div class="card h-100">
+                        <img src="images/vinos/purafe-tinto.jpg" class="card-img-top" alt="Pura Fe Carmenere">
+                        <div class="card-body">
+                            <span class="badge bg-danger mb-2">Tinto</span>
+                            <h5 class="card-title">Pura Fe Carmenere</h5>
+                            <p class="card-text text-muted">Viña Antiyal - 750ml - 14%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$22.900</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Pura Fe Carmenere" data-precio="22900" data-imagen="images/vinos/purafe-tinto.jpg">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 4 chardonnay rosado-->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="rosado">
+                    <div class="card h-100">
+                        <img src="images/vinos/chardonay-rosado.jpg" class="card-img-top" alt="Chardonnay Reserva">
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">Rosado</span>
+                            <h5 class="card-title">Chardonnay Reserva</h5>
+                            <p class="card-text text-muted">Viña Echeverría - 750ml - 13.5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$18.500</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Chardonnay Reserva" data-precio="18500" data-imagen="images/vinos/chardonay-rosado.jpg">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 5 -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="blanco">
+                    <div class="card h-100">
+                        <img src="images/vinos/cipreses-blanco.webp" class="card-img-top" alt="Cipreses Vineyard Sauvignon Blanc">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Blanco</span>
+                            <h5 class="card-title">Cipreses Vineyard Sauvignon Blanc</h5>
+                            <p class="card-text text-muted">Viña Casa Marín - 750ml - 13,5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$24.900</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Cipreses Vineyard Sauvignon Blanc" data-precio="24900" data-imagen="images/vinos/cipreses-blanco.webp">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 6 -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="blanco">
+                    <div class="card h-100">
+                        <img src="images/vinos/riesling-blanco.avif" class="card-img-top" alt="Riesling">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Blanco</span>
+                            <h5 class="card-title">Riesling Miramar Vineyard</h5>
+                            <p class="card-text text-muted">Viña Casa Marín - 750ml - 12.5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$27.500</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Riesling Miramar Vineyard" data-precio="27500" data-imagen="images/vinos/riesling-blanco.avif">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 7 almaviva especial -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="especial">
+                    <div class="card h-100">
+                        <img src="images/vinos/almaviva-especial.jpg" class="card-img-top" alt="Almaviva Especial">
+                        <div class="card-body">
+                            <span class="badge badge-especial-azul mb-2">Especial</span>
+                            <h5 class="card-title">Almaviva</h5>
+                            <p class="card-text text-muted">Viña Almaviva - 750ml - 15%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$135.000</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Almaviva" data-precio="135000" data-imagen="images/vinos/almaviva-especial.jpg">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 8 chadwick especial -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="especial">
+                    <div class="card h-100">
+                        <img src="images/vinos/chadwick-especial.webp" class="card-img-top" alt="Viñedo Chadwick">
+                        <div class="card-body">
+                            <span class="badge badge-especial-azul mb-2">Especial</span>
+                            <h5 class="card-title">Viñedo Chadwick</h5>
+                            <p class="card-text text-muted">Viña Errázuriz - 750ml - 14%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$260.000</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Viñedo Chadwick" data-precio="260000" data-imagen="images/vinos/chadwick-especial.webp">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 9 clos especial -->
+                <div class="col-lg-4 col-md-6 wine-card" data-tipo="especial">
+                    <div class="card h-100">
+                        <img src="images/vinos/clos-especial.webp" class="card-img-top" alt="Clos Apalta">
+                        <div class="card-body">
+                            <span class="badge badge-especial-azul mb-2">Especial</span>
+                            <h5 class="card-title">Clos Apalta</h5>
+                            <p class="card-text text-muted">Viña Lapostolle - 750ml - 14.5%</p>
+                            <p class="fw-bold fs-4 precio" style="color: var(--color-acento);">$150.000</p>
+                            <button class="btn btn-acento w-100" onclick="agregarAlCarrito(this)" data-nombre="Clos Apalta" data-precio="150000" data-imagen="images/vinos/clos-especial.webp">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!---------------------- Recomendados ----------------->
+    <section id="recomendados" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Recomendados para ti</h2>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- Tarjeta 1: Kuyen tinto -->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/kuyen-tinto.jpg" class="card-img-top" alt="Kuyen">
+                            <div class="card-body">
+                                <span class="badge bg-danger mb-2">Tinto</span>
+                                <h5 class="card-title">Kuyen (blend tinto)</h5>
+                                <p class="card-text text-muted">Viña Antiyal - 750ml - 14.5%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$32.000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Pura Fe tinto-->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/purafe-tinto.jpg" class="card-img-top" alt="Pura Fe Carmenere">
+                            <div class="card-body">
+                                <span class="badge bg-danger mb-2">Tinto</span>
+                                <h5 class="card-title">Pura Fe Carmenere</h5>
+                                <p class="card-text text-muted">Viña Antiyal - 750ml - 14%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$22.900</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 5: Cipreses blanco -->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/cipreses-blanco.webp" class="card-img-top" alt="Cipreses Vineyard Sauvignon Blanc">
+                            <div class="card-body">
+                                <span class="badge bg-success mb-2">Blanco</span>
+                                <h5 class="card-title">Cipreses Vineyard Sauvignon Blanc</h5>
+                                <p class="card-text text-muted">Viña Casa Marín - 750ml - 13,5%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$24.900</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 7: Almaviva especial -->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/almaviva-especial.jpg" class="card-img-top" alt="Almaviva">
+                            <div class="card-body">
+                                <span class="badge badge badge-especial-azul mb-2">Especial</span>
+                                <h5 class="card-title">Almaviva</h5>
+                                <p class="card-text text-muted">Viña Almaviva - 750ml - 15%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$135.000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 9: Clos Apalta  especial -->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/clos-especial.webp" class="card-img-top" alt="Clos Apalta">
+                            <div class="card-body">
+                                <span class="badge badge-especial-azul mb-2">Especial</span>
+                                <h5 class="card-title">Clos Apalta</h5>
+                                <p class="card-text text-muted">Viña Lapostolle - 750ml - 14.5%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$150.000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 4: Chardonnay rosado -->
+                    <div class="carousel-card">
+                        <div class="card h-100">
+                            <img src="images/vinos/chardonay-rosado.jpg" class="card-img-top" alt="Chardonnay Reserva">
+                            <div class="card-body">
+                                <span class="badge bg-warning text-dark mb-2">Rosado</span>
+                                <h5 class="card-title">Chardonnay Reserva</h5>
+                                <p class="card-text text-muted">Viña Echeverría - 750ml - 13.5%</p>
+                                <p class="fw-bold" style="color: var(--color-acento);">$18.500</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botones de navegación -->
+                <button class="carousel-btn carousel-btn-left" onclick="moverCarrusel(-1)">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-btn-right" onclick="moverCarrusel(1)">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-------------------- NOSOTROS -------------------->
+    <section id="nosotros" class="py-5">
+        <div class="container">
+            <div class="row align-items-stretch">
+
+                <!-- Texto a la izquierda -->
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <h2 class="section-title mb-4">Nuestra Historia</h2>
+                    <div class="nosotros-texto">
+                        <p class="lead">Viña Urbana nace del amor por los vinos boutique y los productores artesanales chilenos.</p>
+                        <p class="lead">Todo comenzó en 2018, en una pequeña esquina de Providencia, con una idea sencilla: los mejores vinos de Chile no siempre están en las góndolas de los supermercados.</p>
+                        <p class="lead">Recorrimos valles y viñedos pequeños, desde la costa fría hasta los cerros del Maipo, buscando enólogos y familias que cosechan a mano y embotellan en cantidades reducidas. Así nació Viña Urbana, un puente entre esos productores artesanales y quienes quieren descubrir algo distinto sin salir de Santiago.</p>
+                        <p class="lead">Hoy seleccionamos más de 200 etiquetas exclusivas de cinco regiones vitivinícolas, con degustaciones semanales gratuitas y asesoría de maridaje personalizada. Y si el vino no te convence, lo devolvemos sin preguntas.</p>
+                    </div>
+                </div>
+
+                <!-- Foto a la derecha -->
+                <div class="col-lg-5 d-flex align-items-stretch justify-content-center">
+                    <img src="images/sobre-nosotros.jpg" class="img-fluid rounded shadow" alt="Sobre Nosotros" style="object-fit: cover;">
+                </div>
+
+            </div>
+
+            <!-- Puntos destacados debajo -->
+            <div class="row text-center mt-5">
+                <div class="col-6 col-md-3 mb-4">
+                    <i class="bi bi-award fs-1" style="color: var(--color-acento);"></i>
+                    <h5 class="mt-3">200+</h5>
+                    <p class="text-muted mb-0">Etiquetas exclusivas</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <i class="bi bi-geo-alt fs-1" style="color: var(--color-acento);"></i>
+                    <h5 class="mt-3">5</h5>
+                    <p class="text-muted mb-0">Regiones vinícolas</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <i class="bi bi-calendar-check fs-1" style="color: var(--color-acento);"></i>
+                    <h5 class="mt-3">7</h5>
+                    <p class="text-muted mb-0">Degustaciones/semana</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <i class="bi bi-chat-dots fs-1" style="color: var(--color-acento);"></i>
+                    <h5 class="mt-3">100%</h5>
+                    <p class="text-muted mb-0">Asesoría personalizada</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-------------------- Degustación ---------------------->
+    <section id="degustaciones" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="text-center section-title mb-4">Degustaciones</h2>
+            <p class="text-center text-muted mb-5">Descubre nuestros paquetes de degustación y vive una experiencia única con los mejores vinos</p>
+
+            <div class="row g-4">
+
+                <!-- Paquete 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 text-center degustacion-card">
+                        <img src="images/paquete1.jpg" class="card-img-top" alt="	Clos Apalta">
+                        <div class="card-body p-4">
+                            <i class="bi bi-cup-straw fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h4 class="card-title">Iniciación a la cata</h4>
+                            <p class="text-muted mb-3">Descubre el vino a tu ritmo, junto a un sommelier que te guía en cada copa.</p>
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>4 vinos seleccionados</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Duración: 1 hora</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Guía de cata incluida</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Tabla de quesos y pan artesanal.</li>
+                            </ul>
+                            <p class="fw-bold fs-3 mt-4" style="color: var(--color-acento);">$15.000</p>
+                            <button class="btn btn-acento w-100 mt-2" onclick="scrollAReserva()">Reservar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paquete 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 text-center degustacion-card">
+                        <img src="images/paquete2.jpg" class="card-img-top" alt="Clos Apalta">
+                        <div class="card-body p-4">
+                            <i class="bi bi-calendar-heart fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h4 class="card-title">Maridaje Gourmet</h4>
+                            <p class="text-muted mb-3">Una velada donde cada vino encuentra su bocado perfecto.</p>
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>5 vinos maridados</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Duración: 1,5 horas</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Ficha técnica de cada vino para llevar.</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Asesoría de maridaje personalizada</li>
+                            </ul>
+                            <p class="fw-bold fs-3 mt-4" style="color: var(--color-acento);">$28.000</p>
+                            <button class="btn btn-acento w-100 mt-2" onclick="scrollAReserva()">Reservar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paquete 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 text-center degustacion-card">
+                        <img src="images/paquete3.jpg" class="card-img-top" alt="	Clos Apalta">
+                        <div class="card-body p-4">
+                            <i class="bi bi-star fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h4 class="card-title">Edición Limitada</h4>
+                            <p class="text-muted mb-3">Un momento íntimo con etiquetas exclusivas y su historia.</p>
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>4 vinos premium/limitados</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Duración: 2 horas</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Cata dirigida por el sommelier</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--color-acento);"></i>Copa Viña Urbana de regalo.</li>
+                            </ul>
+                            <p class="fw-bold fs-3 mt-4" style="color: var(--color-acento);">$55.000</p>
+                            <button class="btn btn-acento w-100 mt-2" onclick="scrollAReserva()">Reservar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Formulario de Reserva -->
+            <div class="row mt-5" id="formulario-reserva">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card degustacion-card">
+                        <div class="card-body p-4">
+                            <h3 class="text-center mb-4" style="color: var(--color-oscuro);">Reserva tu Degustación</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Nombre completo *</label>
+                                        <input type="text" class="form-control" placeholder="Tu nombre" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email *</label>
+                                        <input type="email" class="form-control" placeholder="tu@email.com" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Teléfono *</label>
+                                        <input type="tel" class="form-control" placeholder="+56 9 1234 5678" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Paquete *</label>
+                                        <select class="form-select" required>
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option>Iniciación a la cata - $15.000</option>
+                                            <option>Maridaje Gourmet - $28.000</option>
+                                            <option>Edición Limitada - $55.000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Fecha preferida *</label>
+                                        <input type="date" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Hora preferida *</label>
+                                        <select class="form-select" required>
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option>10:00</option>
+                                            <option>12:00</option>
+                                            <option>16:00</option>
+                                            <option>18:00</option>
+                                            <option>20:00</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Cantidad de personas *</label>
+                                        <select class="form-select" required>
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option>2 personas</option>
+                                            <option>3-4 personas</option>
+                                            <option>5-6 personas</option>
+                                            <option>7-8 personas</option>
+                                            <option>Más de 8 personas</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Comentarios adicionales</label>
+                                    <textarea class="form-control" rows="3" placeholder="¿Algún vino en particular que te gustaría probar? ¿Algún alergia o restricción alimentaria?"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-acento btn-lg w-100">
+                                    <i class="bi bi-calendar-check me-2"></i>Confirmar Reserva
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    
+    <!--------------  CONTACTO --------------------->
+    <section id="contacto" class="py-5">
+        <div class="container">
+            <h2 class="text-center section-title mb-4">Contáctanos</h2>
+            <p class="text-center text-muted mb-5">¿Tienes alguna pregunta? Estamos aquí para ayudarte</p>
+
+            <div class="row g-4">
+
+                <!-- Formulario -->
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4">Envíanos un mensaje</h4>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Nombre *</label>
+                                        <input type="text" class="form-control" placeholder="Tu nombre" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email *</label>
+                                        <input type="email" class="form-control" placeholder="tu@email.com" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Asunto *</label>
+                                    <select class="form-select" required>
+                                        <option value="" selected>Seleccionar...</option>
+                                        <option>Consulta sobre vinos</option>
+                                        <option>Pedido especial</option>
+                                        <option>Degustación privada</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mensaje *</label>
+                                    <textarea class="form-control" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-acento w-100">
+                                    <i class="bi bi-send me-2"></i>Enviar Mensaje
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de contacto -->
+                <div class="col-lg-6">
+                    <div class="card h-100" style="background-color: var(--color-oscuro); color: white;">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4">Información de Contacto</h4>
+                            <p><i class="bi bi-geo-alt-fill me-3" style="color: var(--color-acento);"></i>Av. Providencia 1234, Santiago</p>
+                            <p><i class="bi bi-telephone-fill me-3" style="color: var(--color-acento);"></i>+56 9 1234 5678</p>
+                            <p><i class="bi bi-envelope-fill me-3" style="color: var(--color-acento);"></i>contacto@viñaurbana.cl</p>
+                            <p><i class="bi bi-clock-fill me-3" style="color: var(--color-acento);"></i>Lun-Sáb: 10:00 - 21:00</p>
+
+                            <hr style="border-color: rgba(255,255,255,0.2);">
+
+                            <h6 class="mb-3">Síguenos</h6>
+                            <div>
+                                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="bi bi-twitter-x fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INFORMACIÓN IMPORTANTE -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">Información Importante</h2>
+
+            <div class="row g-4">
+
+                <!-- Pago Seguro -->
+                <div class="col-md-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <i class="bi bi-shield-lock fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h5>Pago Seguro</h5>
+                            <p class="text-muted">Aceptamos Visa, Mastercard y Amex, con pago 100% protegido.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Envíos -->
+                <div class="col-md-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <i class="bi bi-truck fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h5>Envíos a Todo Chile</h5>
+                            <p class="text-muted">Realizamos envíos a todo el país. Despacho gratis en compras sobre $50.000 en Providencia. Tiempo de entrega: 2-5 días hábiles.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edad Mínima -->
+                <div class="col-md-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <i class="bi bi-person-exclamation fs-1 mb-3" style="color: var(--color-acento);"></i>
+                            <h5>Edad Mínima</h5>
+                            <p class="text-muted">Venta exclusiva a mayores de 18 años.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background-color: var(--color-oscuro); color: var(--color-beige);">
+        <div class="container py-5">
+            <div class="row">
+
+                <!-- Marca -->
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3"><i class="bi bi-cup-straw me-2"></i>Viña Urbana</h5>
+                    <p>Tu tienda de vinos boutique en Providencia. Vinos exclusivos de productores artesanales chilenos.</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white fs-5"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+
+                <!-- Tienda -->
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="text-white mb-3">Tienda</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#catalogo" class="footer-link">Vinos Tintos</a></li>
+                        <li class="mb-2"><a href="#catalogo" class="footer-link">Vinos Blancos</a></li>
+                        <li class="mb-2"><a href="#catalogo" class="footer-link">Vinos Rosados</a></li>
+                        <li class="mb-2"><a href="#catalogo" class="footer-link">Ediciones Limitadas</a></li>
+                    </ul>
+                </div>
+
+                <!-- Empresa -->
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="text-white mb-3">Empresa</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#nosotros" class="footer-link">Sobre Nosotros</a></li>
+                        <li class="mb-2"><a href="#degustaciones" class="footer-link">Degustaciones</a></li>
+                        <li class="mb-2"><a href="#contacto" class="footer-link">Contacto</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.1);">
+
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2026 Viña Urbana. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <i class="bi bi-credit-card-2-front fs-4 text-white me-2"></i>
+                    <i class="bi bi-credit-card fs-4 text-white me-2"></i>
+                    <i class="bi bi-paypal fs-4 text-white"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL VERIFICACIÓN DE EDAD -->
+    <div class="modal fade" id="ageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden;">
+                <div class="modal-body text-center p-5" style="background-color: var(--color-blanco);">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: var(--color-acento);"></i>
+                    </div>
+                    <h3 class="mb-3" style="color: var(--color-oscuro);">Verificación de Edad</h3>
+                    <p class="text-muted mb-4">Este sitio web contiene información sobre bebidas alcohólicas. Para continuar, debes ser mayor de 18 años.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button class="btn btn-acento btn-lg px-5" onclick="confirmarEdad()">Sí, tengo 18 años</button>
+                        <button class="btn btn-outline-secondary btn-lg px-5" onclick="rechazarEdad()">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ------------------------ CARRITO ------------------>
+    <div class="cart-overlay" id="cartOverlay" onclick="cerrarCarrito()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <h5 class="mb-0"><i class="bi bi-cart3 me-2"></i>Mi Carrito</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="cerrarCarrito()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="flex-grow-1 overflow-auto p-3" id="cartItems">
+            <div class="text-center py-5">
+                <i class="bi bi-cart-x display-1 text-muted"></i>
+                <h5 class="mt-3 text-muted">Tu carrito está vacío</h5>
+                <p class="text-muted">Explora nuestro catálogo para encontrar vinos increíbles</p>
+            </div>
+        </div>
+        <div class="p-3 border-top">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <strong id="cartSubtotal">$0</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-3 fs-5">
+                <span class="fw-bold">Total:</span>
+                <strong style="color: var(--color-acento);" id="cartTotal">$0</strong>
+            </div>
+            <button class="btn btn-acento w-100">
+                <i class="bi bi-lock me-2"></i>Ir a Checkout
+            </button>
+        </div>
+    </div>
+
+        <!-- MODAL USUARIO -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header" style="background-color: var(--color-oscuro); color: white;">
+                    <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Mi Cuenta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-4">
+                        <li class="nav-item">
+                            <button class="nav-link active" onclick="mostrarTab('login')">Iniciar Sesión</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" onclick="mostrarTab('register')">Registrarse</button>
+                        </li>
+                    </ul>
+
+                    <!-- Login -->
+                    <div id="tabLogin">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="tu@email.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" placeholder="••••••">
+                            </div>
+                            <button type="button" class="btn btn-acento w-100">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Register -->
+                    <div id="tabRegister" style="display: none;">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" placeholder="+56 9 1234 5678">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña *</label>
+                                <input type="password" class="form-control" required minlength="6">
+                            </div>
+                            <button type="button" class="btn btn-acento w-100">
+                                <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
