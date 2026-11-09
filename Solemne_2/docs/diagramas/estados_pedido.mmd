@@ -1,0 +1,14 @@
+stateDiagram-v2
+  [*] --> PENDIENTE_PAGO: S10 crear (stock reservado)
+  PENDIENTE_PAGO --> PAGADO: payments informa APROBADO y monto = total
+  PENDIENTE_PAGO --> PENDIENTE_PAGO: pago RECHAZADO (puede reintentar)
+  PENDIENTE_PAGO --> CANCELADO: S13 cliente anula / vence plazo de 15 min (stock liberado)
+  PAGADO --> EN_PREPARACION: S29 ADMIN
+  EN_PREPARACION --> DESPACHADO: S29 ADMIN
+  DESPACHADO --> ENTREGADO: S29 ADMIN
+  ENTREGADO --> [*]
+  CANCELADO --> [*]
+  note right of CANCELADO
+    No se borra: queda en el historial.
+    Un pago tardío se marca REQUIERE_REVERSA.
+  end note

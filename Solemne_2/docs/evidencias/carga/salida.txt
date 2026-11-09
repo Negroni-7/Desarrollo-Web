@@ -1,0 +1,11 @@
+→ C1 Catálogo público (S01) vía gateway (concurrencia 20, 30 s)
+   6388 sol. · 212.2 sol/s · p95 149.1 ms · errores 0.0% → CUMPLE
+→ C2 Cotizar carrito (S02) → gRPC QuoteItems (concurrencia 10, 30 s)
+   6401 sol. · 213.2 sol/s · p95 68.5 ms · errores 0.0% → CUMPLE
+→ C3 Crear y anular pedido (S10+S13) → gRPC Reserve/Release (concurrencia 5, 30 s)
+   1547 sol. · 51.3 sol/s · p95 138.9 ms · errores 0.0% → CUMPLE
+→ C4 GraphQL misPedidos (S11) orders+inventory+payments (concurrencia 5, 30 s)
+   2451 sol. · 81.4 sol/s · p95 94.8 ms · errores 0.0% → CUMPLE
+→ C5 gRPC QuoteItems directo (orders→inventory, mTLS) (concurrencia 10, 30 s)
+   34882 sol. · 1160.1 sol/s · p95 13.9 ms · errores 0.0% → CUMPLE
+Resultados en /home/claude/Desarrollo-Web/Evaluacion_2/docs/evidencias/carga/resultados.json

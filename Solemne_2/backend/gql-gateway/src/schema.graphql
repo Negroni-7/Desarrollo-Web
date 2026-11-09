@@ -1,0 +1,125 @@
+"""
+GraphQL Gateway privado de Viña Urbana.
+Sólo es alcanzable a través del API Gateway (POST /api/v1/graphql).
+Cada operación y algunos campos tienen su propia regla de autorización.
+Sólo hay consultas: las reglas transaccionales (crear, anular, pagar) quedan
+en los servicios de negocio vía REST.
+"""
+type Query {
+  "S11 - Rol CLIENTE. Pedidos propios con productos (inventory) y pago/boleta (payments)."
+  misPedidos(pagina: Int = 1, tamano: Int = 5): PaginaPedidos!
+  "S12 - Dueño del pedido o ADMIN. Combina orders + inventory + payments."
+  resumenPedido(id: ID!): ResumenPedido
+  "S34 - Rol ADMIN. Combina analytics (ventas) + inventory (stock bajo)."
+  panelVentas(desde: String!, hasta: String!): PanelVentas!
+}
+
+type PaginaPedidos {
+  items: [ResumenPedido!]!
+  total: Int!
+  pagina: Int!
+  tamano: Int!
+}
+
+enum EstadoPedido {
+  PENDIENTE_PAGO
+  PAGADO
+  EN_PREPARACION
+  DESPACHADO
+  ENTREGADO
+  CANCELADO
+}
+
+type ResumenPedido {
+  id: ID!
+  numero: Int!
+  estado: EstadoPedido!
+  creadoEn: String!
+  venceEn: String
+  subtotal: Int!
+  despacho: Int!
+  total: Int!
+  items: [ItemPedido!]!
+  entrega: Entrega!
+  historial: [EventoPedido!]!
+  "Desde payments. Null si payments no responde (error parcial)."
+  pago: Pago
+  "Sólo ADMIN."
+  clienteId: ID
+}
+
+type ItemPedido {
+  productoId: ID!
+  "Nombre y precio guardados al momento de la compra (historial estable)."
+  nombre: String!
+  cantidad: Int!
+  precioUnitario: Int!
+  subtotal: Int!
+  "Estado actual del producto en inventory. Null si inventory no responde o el producto ya no existe."
+  producto: ProductoActual
+}
+
+type ProductoActual {
+  id: ID!
+  nombre: String!
+  tipo: String!
+  imagen: String!
+  disponible: Boolean!
+  precioActual: Int!
+}
+
+type Entrega {
+  nombreReceptor: String!
+  calle: String!
+  numero: String!
+  depto: String
+  comuna: String!
+  region: String!
+  telefono: String!
+  indicaciones: String
+}
+
+type EventoPedido {
+  estado: String!
+  fecha: String!
+}
+
+type Pago {
+  id: ID!
+  estado: String!
+  monto: Int!
+  actualizadoEn: String!
+  boleta: Boleta
+}
+
+type Boleta {
+  folio: Int!
+  neto: Int!
+  iva: Int!
+  total: Int!
+  emitidaEn: String!
+}
+
+type PanelVentas {
+  desde: String!
+  hasta: String!
+  totalVentas: Int!
+  pedidosPagados: Int!
+  ticketPromedio: Int!
+  pedidosCancelados: Int!
+  ventasPorDia: [VentaDia!]!
+  ventasPorTipo: [VentaTipo!]!
+  topProductos: [TopProducto!]!
+  pedidosPorRegion: [PedidosRegion!]!
+  reservasPorPaquete: [ReservasPaquete!]!
+  "Desde inventory. Null si inventory no responde (error parcial)."
+  stockBajo: [StockBajo!]
+  generadoEn: String!
+}
+
+type VentaDia { dia: String!, ventas: Int!, pedidos: Int! }
+type VentaTipo { tipo: String!, ventas: Int!, unidades: Int! }
+type TopProducto { productoId: ID!, nombre: String!, unidades: Int!, ventas: Int! }
+type PedidosRegion { region: String!, pedidos: Int! }
+type ReservasPaquete { paquete: String!, reservas: Int!, personas: Int! }
+type StockBajo { id: ID!, nombre: String!, stock: Int! }

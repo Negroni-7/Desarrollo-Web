@@ -1,0 +1,36 @@
+flowchart TB
+  B(["Cliente HTTP<br/>(frontend v1.0 a futuro · Postman · pruebas)"])
+  PROV(["Proveedor de pagos (tercero)<br/>PagoSeguro Sandbox :8090"])
+  subgraph EDGE["Red edge · única con puertos publicados"]
+    GW["API Gateway :8443 · TLS<br/>rutas explícitas · authN/authZ · CSRF · límites"]
+  end
+  subgraph BACK["Red backend · internal (sin acceso desde el host)"]
+    direction TB
+    GQL["GraphQL Gateway (privado)"]
+    subgraph TX["Servicios transaccionales"]
+      AUTH["Auth Service"]
+      CLI["clients"]
+      INV["inventory<br/>REST + gRPC"]
+      ORD["orders"]
+      PAY["payments"]
+      TAS["tastings"]
+    end
+    ANA["analytics (reportes)"]
+  end
+  subgraph INFRA["Redes data y secrets · internal"]
+    MDB[("MongoDB · TLS<br/>1 base + 1 usuario por servicio")]
+    V[("Vault · KV v2<br/>1 token y 1 política por servicio")]
+  end
+  B -->|"HTTPS /api/v1 + cookie HttpOnly"| GW
+  B -.->|"redirección de pago"| PROV
+  PROV -->|"webhook firmado HMAC"| GW
+  GW -->|"HTTPS + credencial del tramo<br/>+ identidad verificada"| TX
+  GW -->|"POST /graphql"| GQL
+  GQL -->|"REST + DataLoader"| ORD & INV & PAY & ANA
+  ORD ==>|"gRPC mTLS unary"| INV
+  ORD -.->|"outbox"| ANA
+  TAS -.->|"outbox"| ANA
+  PAY -->|"resultado de pago"| ORD
+  PAY -->|"API comercio · red egress"| PROV
+  TX --- INFRA
+  ANA --- MDB

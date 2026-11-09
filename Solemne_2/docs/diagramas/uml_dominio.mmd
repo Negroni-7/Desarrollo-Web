@@ -1,0 +1,193 @@
+---
+title: UML de dominio (modelo interno) - Viña Urbana
+---
+classDiagram
+  direction TB
+  class Credencial {
+    <<entity · auth>>
+    +id: UUID
+    +email: String
+    -passwordHash: Argon2id
+    +rol: Rol
+    +estado: EstadoCuenta
+    -intentosFallidos: int
+    -bloqueadoHasta: DateTime
+  }
+  class Sesion {
+    <<entity · auth>>
+    +jti: UUID
+    +userId: UUID
+    +exp: DateTime
+    +revocada: bool
+  }
+  class PerfilCliente {
+    <<entity · clients>>
+    +userId: UUID
+    +nombre: String
+    +email: String
+    +telefono: String
+    +fechaNacimiento: Date
+    +estado: EstadoCuenta
+  }
+  class Direccion {
+    <<value object>>
+    +calle: String
+    +numero: String
+    +depto: String
+    +comuna: String
+    +region: Region
+  }
+  class MensajeContacto {
+    <<entity · clients>>
+    +id: UUID
+    +nombre: String
+    +email: String
+    +asunto: Asunto
+    +mensaje: String
+    +estado: EstadoMensaje
+    +recibidoEn: DateTime
+  }
+  class Pedido {
+    <<entity · orders>>
+    +id: UUID
+    +numero: int
+    +clienteId: UUID
+    +estado: EstadoPedido
+    +subtotal: int
+    +despacho: int
+    +total: int
+    +venceEn: DateTime
+    -idempotencyKey: UUID
+  }
+  class DetallePedido {
+    <<entity · orders>>
+    +productoId: String
+    +nombre: String ‹copia›
+    +tipo: TipoVino
+    +precioUnitario: int ‹copia›
+    +cantidad: int [1..24]
+    +subtotal: int
+  }
+  class Entrega {
+    <<value object>>
+    +nombreReceptor: String
+    +calle, numero, depto
+    +comuna: String
+    +region: Region
+    +telefono: String
+    +indicaciones: String
+  }
+  class EventoPedido {
+    <<entity · orders>>
+    +estado: String
+    +fecha: DateTime
+    +actor: String
+  }
+  class Producto {
+    <<entity · inventory>>
+    +id: String
+    +nombre: String
+    +tipo: TipoVino
+    +vina: String
+    +volumenMl: int
+    +gradoAlcohol: float
+    +precio: int
+    +imagen: String
+    +recomendado: bool
+    +activo: bool
+    -stock: int
+  }
+  class ReservaStock {
+    <<entity · inventory>>
+    +id: UUID ‹= pedido.id›
+    +estado: HELD/COMMITTED/RELEASED/FAILED
+    +items: Map~productoId,int~
+  }
+  class MovimientoStock {
+    <<entity · inventory>>
+    +productoId: String
+    +delta: int
+    +motivo: Motivo
+    +actor: UUID
+    +fecha: DateTime
+  }
+  class Pago {
+    <<entity · payments>>
+    +id: UUID
+    +pedidoId: UUID
+    +clienteId: UUID
+    +monto: int ‹de orders›
+    +estado: EstadoPago
+    +proveedor: String
+    -tokenProveedor: String
+  }
+  class Boleta {
+    <<value object>>
+    +folio: int
+    +neto: int
+    +iva: int
+    +total: int
+    +emitidaEn: DateTime
+  }
+  class NotificacionProveedor {
+    <<entity · payments>>
+    +eventId: String ‹único›
+    +token: String
+    +recibidoEn: DateTime
+  }
+  class PaqueteDegustacion {
+    <<entity · tastings>>
+    +id: String
+    +nombre: String
+    +incluye: String[]
+    +duracionMin: int
+    +precioPorPersona: int
+  }
+  class SesionCata {
+    <<entity · tastings>>
+    +fecha: Date
+    +hora: Hora
+    +ocupados: int [0..12]
+  }
+  class ReservaDegustacion {
+    <<entity · tastings>>
+    +id: UUID
+    +clienteId: UUID
+    +personas: int [1..12]
+    +total: int
+    +estado: EstadoReserva
+    +contacto: Contacto
+    -comentarios: String ‹sensible›
+  }
+  class EventoAnalitico {
+    <<entity · analytics>>
+    +eventId: UUID
+    +tipo: TipoEvento
+    +ocurridoEn: DateTime
+    +datos: (items, total, region)
+  }
+  class Carrito {
+    <<cliente · no persistido>>
+    +items: (productoId, cantidad)[]
+    ‹sin precios›
+  }
+  Credencial "1" *-- "0..*" Sesion : abre
+  Credencial "1" --> "0..1" PerfilCliente : mismo userId
+  PerfilCliente "1" *-- "0..1" Direccion : predeterminada
+  PerfilCliente "0..1" --> "0..*" MensajeContacto : envía
+  PerfilCliente "1" --> "0..*" Pedido : realiza
+  Pedido "1" *-- "1..*" DetallePedido : contiene
+  Pedido "1" *-- "1" Entrega : se entrega en
+  Pedido "1" *-- "1..*" EventoPedido : historial
+  DetallePedido "0..*" --> "1" Producto : copia de
+  Pedido "1" --> "0..1" ReservaStock : reserva
+  ReservaStock "0..*" --> "1..*" Producto : bloquea
+  Producto "1" *-- "0..*" MovimientoStock : auditoría
+  Pedido "1" --> "0..*" Pago : se paga con
+  Pago "1" *-- "0..1" Boleta : emite
+  Pago "1" --> "0..*" NotificacionProveedor : recibe
+  PaqueteDegustacion "1" --> "0..*" ReservaDegustacion : reservado en
+  SesionCata "1" o-- "0..*" ReservaDegustacion : ocupa
+  PerfilCliente "1" --> "0..*" ReservaDegustacion : reserva
+  Pedido ..> EventoAnalitico : publica (outbox)
+  Carrito ..> Pedido : se convierte en (S10)

@@ -1,0 +1,424 @@
+{
+  "entorno": {
+    "python": "3.13.18",
+    "os": "Linux-6.18.44-fc-v310-x86_64-with-glibc2.39",
+    "cpus": 2,
+    "ram_gb": 8.4,
+    "mode": "local (procesos, TLS en todos los tramos)",
+    "fecha": "2026-11-08 16:06:20",
+    "duracion_por_escenario_s": 30,
+    "tipo": "medición"
+  },
+  "escenarios": [
+    {
+      "id": "C1",
+      "name": "Catálogo público (S01) vía gateway",
+      "concurrency": 20,
+      "p95_ms": 300,
+      "max_err": 1.0,
+      "requests": 6388,
+      "duration_s": 30.1,
+      "throughput_rps": 212.2,
+      "p50_ms": 88.7,
+      "p95_ms_measured": 149.1,
+      "p99_ms": 194.3,
+      "max_ms": 323.7,
+      "errors": 0,
+      "error_pct": 0.0,
+      "status_codes": {
+        "200": 6388
+      },
+      "resources": {
+        "mongo": {
+          "cpu_avg_pct": 16.5,
+          "cpu_max_pct": 19.9,
+          "rss_max_mb": 224.5
+        },
+        "vault": {
+          "cpu_avg_pct": 0.5,
+          "cpu_max_pct": 3.0,
+          "rss_max_mb": 236.6
+        },
+        "auth": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 154.1
+        },
+        "clients": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.9
+        },
+        "inventory": {
+          "cpu_avg_pct": 45.3,
+          "cpu_max_pct": 51.6,
+          "rss_max_mb": 104.0
+        },
+        "orders": {
+          "cpu_avg_pct": 0.3,
+          "cpu_max_pct": 2.0,
+          "rss_max_mb": 98.2
+        },
+        "payments": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 76.4
+        },
+        "tastings": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 77.1
+        },
+        "analytics": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.1
+        },
+        "sandbox": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.9
+        },
+        "gateway": {
+          "cpu_avg_pct": 75.3,
+          "cpu_max_pct": 83.9,
+          "rss_max_mb": 71.9
+        },
+        "graphql": {
+          "cpu_avg_pct": 0.0,
+          "cpu_max_pct": 0.0,
+          "rss_max_mb": 93.7
+        }
+      },
+      "meets_target": true
+    },
+    {
+      "id": "C2",
+      "name": "Cotizar carrito (S02) → gRPC QuoteItems",
+      "concurrency": 10,
+      "p95_ms": 400,
+      "max_err": 1.0,
+      "requests": 6401,
+      "duration_s": 30.0,
+      "throughput_rps": 213.2,
+      "p50_ms": 45.5,
+      "p95_ms_measured": 68.5,
+      "p99_ms": 83.1,
+      "max_ms": 141.0,
+      "errors": 0,
+      "error_pct": 0.0,
+      "status_codes": {
+        "200": 6401
+      },
+      "resources": {
+        "mongo": {
+          "cpu_avg_pct": 7.0,
+          "cpu_max_pct": 9.0,
+          "rss_max_mb": 224.7
+        },
+        "vault": {
+          "cpu_avg_pct": 0.6,
+          "cpu_max_pct": 4.0,
+          "rss_max_mb": 236.9
+        },
+        "auth": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 154.1
+        },
+        "clients": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.9
+        },
+        "inventory": {
+          "cpu_avg_pct": 18.0,
+          "cpu_max_pct": 20.0,
+          "rss_max_mb": 104.5
+        },
+        "orders": {
+          "cpu_avg_pct": 44.1,
+          "cpu_max_pct": 49.0,
+          "rss_max_mb": 101.1
+        },
+        "payments": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 76.4
+        },
+        "tastings": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 77.1
+        },
+        "analytics": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.1
+        },
+        "sandbox": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.9
+        },
+        "gateway": {
+          "cpu_avg_pct": 67.1,
+          "cpu_max_pct": 80.9,
+          "rss_max_mb": 73.2
+        },
+        "graphql": {
+          "cpu_avg_pct": 0.0,
+          "cpu_max_pct": 0.0,
+          "rss_max_mb": 93.7
+        }
+      },
+      "meets_target": true
+    },
+    {
+      "id": "C3",
+      "name": "Crear y anular pedido (S10+S13) → gRPC Reserve/Release",
+      "concurrency": 5,
+      "p95_ms": 800,
+      "max_err": 1.0,
+      "requests": 1547,
+      "duration_s": 30.2,
+      "throughput_rps": 51.3,
+      "p50_ms": 93.6,
+      "p95_ms_measured": 138.9,
+      "p99_ms": 173.8,
+      "max_ms": 204.9,
+      "errors": 0,
+      "error_pct": 0.0,
+      "status_codes": {
+        "200": 1547
+      },
+      "resources": {
+        "mongo": {
+          "cpu_avg_pct": 22.5,
+          "cpu_max_pct": 25.0,
+          "rss_max_mb": 233.0
+        },
+        "vault": {
+          "cpu_avg_pct": 0.7,
+          "cpu_max_pct": 4.0,
+          "rss_max_mb": 237.1
+        },
+        "auth": {
+          "cpu_avg_pct": 24.0,
+          "cpu_max_pct": 27.0,
+          "rss_max_mb": 154.9
+        },
+        "clients": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.9
+        },
+        "inventory": {
+          "cpu_avg_pct": 16.1,
+          "cpu_max_pct": 19.0,
+          "rss_max_mb": 98.4
+        },
+        "orders": {
+          "cpu_avg_pct": 38.8,
+          "cpu_max_pct": 50.0,
+          "rss_max_mb": 101.5
+        },
+        "payments": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 76.4
+        },
+        "tastings": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 77.1
+        },
+        "analytics": {
+          "cpu_avg_pct": 5.8,
+          "cpu_max_pct": 16.0,
+          "rss_max_mb": 75.3
+        },
+        "sandbox": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.9
+        },
+        "gateway": {
+          "cpu_avg_pct": 45.6,
+          "cpu_max_pct": 57.8,
+          "rss_max_mb": 73.4
+        },
+        "graphql": {
+          "cpu_avg_pct": 0.0,
+          "cpu_max_pct": 0.0,
+          "rss_max_mb": 93.7
+        }
+      },
+      "meets_target": true
+    },
+    {
+      "id": "C4",
+      "name": "GraphQL misPedidos (S11) orders+inventory+payments",
+      "concurrency": 5,
+      "p95_ms": 800,
+      "max_err": 1.0,
+      "requests": 2451,
+      "duration_s": 30.1,
+      "throughput_rps": 81.4,
+      "p50_ms": 58.2,
+      "p95_ms_measured": 94.8,
+      "p99_ms": 117.1,
+      "max_ms": 208.8,
+      "errors": 0,
+      "error_pct": 0.0,
+      "status_codes": {
+        "200": 2451
+      },
+      "resources": {
+        "mongo": {
+          "cpu_avg_pct": 20.2,
+          "cpu_max_pct": 23.9,
+          "rss_max_mb": 235.6
+        },
+        "vault": {
+          "cpu_avg_pct": 0.8,
+          "cpu_max_pct": 4.0,
+          "rss_max_mb": 238.1
+        },
+        "auth": {
+          "cpu_avg_pct": 19.8,
+          "cpu_max_pct": 24.0,
+          "rss_max_mb": 174.9
+        },
+        "clients": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.9
+        },
+        "inventory": {
+          "cpu_avg_pct": 14.8,
+          "cpu_max_pct": 18.0,
+          "rss_max_mb": 99.8
+        },
+        "orders": {
+          "cpu_avg_pct": 27.8,
+          "cpu_max_pct": 40.0,
+          "rss_max_mb": 102.2
+        },
+        "payments": {
+          "cpu_avg_pct": 14.5,
+          "cpu_max_pct": 18.0,
+          "rss_max_mb": 79.0
+        },
+        "tastings": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 77.1
+        },
+        "analytics": {
+          "cpu_avg_pct": 5.8,
+          "cpu_max_pct": 16.0,
+          "rss_max_mb": 75.4
+        },
+        "sandbox": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.9
+        },
+        "gateway": {
+          "cpu_avg_pct": 37.5,
+          "cpu_max_pct": 43.9,
+          "rss_max_mb": 73.4
+        },
+        "graphql": {
+          "cpu_avg_pct": 24.3,
+          "cpu_max_pct": 37.9,
+          "rss_max_mb": 182.4
+        }
+      },
+      "meets_target": true
+    },
+    {
+      "id": "C5",
+      "name": "gRPC QuoteItems directo (orders→inventory, mTLS)",
+      "concurrency": 10,
+      "p95_ms": 50,
+      "max_err": 0.0,
+      "requests": 34882,
+      "duration_s": 30.1,
+      "throughput_rps": 1160.1,
+      "p50_ms": 8.4,
+      "p95_ms_measured": 13.9,
+      "p99_ms": 17.8,
+      "max_ms": 83.9,
+      "errors": 0,
+      "error_pct": 0.0,
+      "status_codes": {
+        "OK": 34882
+      },
+      "resources": {
+        "mongo": {
+          "cpu_avg_pct": 26.2,
+          "cpu_max_pct": 31.0,
+          "rss_max_mb": 236.7
+        },
+        "vault": {
+          "cpu_avg_pct": 0.4,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 238.1
+        },
+        "auth": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 174.9
+        },
+        "clients": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 75.9
+        },
+        "inventory": {
+          "cpu_avg_pct": 88.0,
+          "cpu_max_pct": 94.8,
+          "rss_max_mb": 100.1
+        },
+        "orders": {
+          "cpu_avg_pct": 6.1,
+          "cpu_max_pct": 22.0,
+          "rss_max_mb": 102.4
+        },
+        "payments": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 79.0
+        },
+        "tastings": {
+          "cpu_avg_pct": 0.2,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 77.1
+        },
+        "analytics": {
+          "cpu_avg_pct": 4.6,
+          "cpu_max_pct": 17.0,
+          "rss_max_mb": 75.4
+        },
+        "sandbox": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.9
+        },
+        "gateway": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 1.0,
+          "rss_max_mb": 73.4
+        },
+        "graphql": {
+          "cpu_avg_pct": 0.1,
+          "cpu_max_pct": 2.0,
+          "rss_max_mb": 182.4
+        }
+      },
+      "meets_target": true
+    }
+  ]
+}

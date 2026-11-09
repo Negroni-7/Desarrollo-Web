@@ -1,0 +1,26 @@
+sequenceDiagram
+  autonumber
+  actor A as Cliente A
+  actor B as Cliente B
+  participant GW as API Gateway
+  participant AU as Auth
+  participant G as GraphQL Gateway
+  participant O as orders
+  A->>GW: POST /api/v1/graphql resumenPedido(id=X)
+  GW->>AU: introspect(cookie A)
+  AU-->>GW: activo, sub=A, rol=CLIENTE
+  GW->>G: + X-Caller-Id gateway, credencial del tramo, X-User-Id=A
+  G->>G: valida identidad de servicio, profundidad y costo
+  G->>O: GET /internal/orders/X (credencial graphql→orders, usuario A)
+  O->>O: pedido.clienteId == A ✔
+  O-->>G: 200 pedido
+  G-->>A: data.resumenPedido = {...}
+  B->>GW: POST /api/v1/graphql resumenPedido(id=X)
+  GW->>AU: introspect(cookie B)
+  AU-->>GW: activo, sub=B
+  GW->>G: X-User-Id=B
+  G->>O: GET /internal/orders/X (usuario B)
+  O->>O: pedido.clienteId ≠ B ✘
+  O-->>G: 404 (no revela existencia)
+  G-->>B: data.resumenPedido = null
+  Note over B,O: Si B llama directo a orders:8000 sin credencial de servicio → 401 INVALID_SERVICE_IDENTITY

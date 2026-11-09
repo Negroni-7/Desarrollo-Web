@@ -1,0 +1,58 @@
+// Contrato gRPC interno entre orders (cliente) e inventory (servidor).
+// Transporte: mTLS. Sólo el certificado con CN "orders" está autorizado.
+// Modalidad: unary en todos los métodos (cada operación es una decisión
+// atómica y corta; no hay flujo continuo de datos que justifique streaming).
+syntax = "proto3";
+
+package vinaurbana.inventory.v1;
+
+service InventoryReservations {
+  // Precio y disponibilidad oficiales para cotizar o crear un pedido. Plazo: 1 s.
+  rpc QuoteItems (QuoteRequest) returns (QuoteResponse);
+  // Reserva stock para un pedido. Idempotente por reservation_id. Plazo: 2 s.
+  rpc ReserveStock (ReserveRequest) returns (ReservationResult);
+  // Confirma la reserva cuando el pedido queda pagado. Idempotente. Plazo: 2 s.
+  rpc CommitReservation (ReservationRef) returns (ReservationResult);
+  // Libera la reserva y devuelve el stock (anulación o pago vencido). Idempotente. Plazo: 2 s.
+  rpc ReleaseReservation (ReservationRef) returns (ReservationResult);
+}
+
+message ItemQuantity {
+  string product_id = 1;
+  int32 quantity = 2;
+}
+
+message QuoteRequest {
+  repeated ItemQuantity items = 1;
+}
+
+message QuotedItem {
+  string product_id = 1;
+  string name = 2;
+  string type = 3;        // tinto | blanco | rosado | especial
+  int64 unit_price = 4;   // CLP, entero
+  string image = 5;
+  bool active = 6;
+  bool available = 7;     // hay stock suficiente para la cantidad pedida
+  int32 quantity = 8;
+}
+
+message QuoteResponse {
+  repeated QuotedItem items = 1;
+}
+
+message ReserveRequest {
+  string reservation_id = 1;  // = id del pedido
+  repeated ItemQuantity items = 2;
+}
+
+message ReservationRef {
+  string reservation_id = 1;
+  string reason = 2;
+}
+
+message ReservationResult {
+  string reservation_id = 1;
+  string status = 2;                       // HELD | COMMITTED | RELEASED
+  repeated string unavailable_products = 3; // detalle cuando no hay stock
+}

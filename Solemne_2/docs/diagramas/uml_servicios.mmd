@@ -1,0 +1,131 @@
+---
+title: UML de servicios públicos («service») y DTO
+---
+classDiagram
+  direction TB
+  class AuthService {
+    <<service>>
+    +registrar(RegistroDTO) UsuarioDTO  S03
+    +iniciarSesion(LoginDTO) SesionDTO  S04
+    +cerrarSesion() void  S05
+    +consultarSesion() SesionDTO  S06
+  }
+  class ClientService {
+    <<service>>
+    +consultarPerfil() PerfilDTO  S07
+    +modificarPerfil(PerfilDTO) PerfilDTO  S08
+    +eliminarCuenta() void  S09
+    +enviarContacto(ContactoDTO) AcuseDTO  S22
+    +listarMensajes(estado) Pagina~MensajeDTO~  S32
+    +atenderMensaje(id) MensajeDTO  S33
+  }
+  class CatalogService {
+    <<service>>
+    +consultarCatalogo(filtro) Pagina~ProductoDTO~  S01
+    +listarInventario() ProductoAdminDTO[]  S23
+    +crearProducto(dto) ProductoAdminDTO  S24
+    +modificarProducto(id, dto) ProductoAdminDTO  S25
+    +ajustarStock(id, delta, motivo) ProductoAdminDTO  S26
+    +retirarProducto(id) void  S27
+  }
+  class OrderService {
+    <<service>>
+    +cotizar(items, destino) CotizacionDTO  S02
+    +crearPedido(PedidoNuevoDTO, key) PedidoDTO  S10
+    +anularPedido(id) PedidoDTO  S13
+    +listarPedidos(estado) Pagina~PedidoDTO~  S28
+    +cambiarEstado(id, estado) PedidoDTO  S29
+  }
+  class PaymentService {
+    <<service>>
+    +iniciarPago(pedidoId) InicioPagoDTO  S14
+    +verificarPago(id) PagoDTO  S15
+    +recibirNotificacion(evento firmado) AcuseDTO  S16
+  }
+  class TastingService {
+    <<service>>
+    +consultarPaquetes() PaqueteDTO[]  S17
+    +consultarDisponibilidad(fecha) DisponibilidadDTO  S18
+    +reservar(ReservaNuevaDTO) ReservaDTO  S19
+    +misReservas() ReservaDTO[]  S20
+    +cancelarReserva(id) ReservaDTO  S21
+    +listarReservas(fecha) ReservaStaffDTO[]  S30
+    +gestionarReserva(id, estado) ReservaStaffDTO  S31
+  }
+  class AggregationService {
+    <<service · GraphQL>>
+    +misPedidos(pagina, tamano) PaginaPedidos  S11
+    +resumenPedido(id) ResumenPedido  S12
+    +panelVentas(desde, hasta) PanelVentas  S34
+  }
+  class SesionDTO {
+    <<DTO>>
+    +user: (id, email, rol)
+    +expiresIn: int
+    ‹sin token: viaja en cookie HttpOnly›
+  }
+  class PerfilDTO {
+    <<DTO>>
+    +nombre
+    +email
+    +telefono
+    +fechaNacimiento
+    +direccion
+  }
+  class ProductoDTO {
+    <<DTO público>>
+    +id, nombre, tipo, vina
+    +volumenMl, gradoAlcohol
+    +precio, imagen
+    +recomendado
+    +disponible: bool ‹no expone stock›
+  }
+  class CotizacionDTO {
+    <<DTO>>
+    +items: LineaCotizada[]
+    +noDisponibles: String[]
+    +subtotal, despacho, total
+  }
+  class PedidoDTO {
+    <<DTO>>
+    +id, numero, estado
+    +items: LineaDTO[]
+    +subtotal, despacho, total
+    +entrega
+    +historial
+    ‹clienteId sólo ADMIN›
+  }
+  class PagoDTO {
+    <<DTO>>
+    +pagoId, pedidoId, estado
+    +monto: int
+    +boleta: BoletaDTO
+  }
+  class ReservaDTO {
+    <<DTO>>
+    +id, paquete, fecha, hora
+    +personas, total, estado
+    ‹contacto sólo staff›
+  }
+  class ResumenPedido {
+    <<GraphQL type>>
+    +orders: estado, total, items
+    +inventory: producto actual
+    +payments: pago, boleta
+  }
+  class PanelVentas {
+    <<GraphQL type>>
+    +analytics: ventas, top, por día
+    +inventory: stockBajo
+  }
+  AuthService ..> SesionDTO : «use»
+  ClientService ..> PerfilDTO : «use»
+  CatalogService ..> ProductoDTO : «use»
+  OrderService ..> CotizacionDTO : «use»
+  OrderService ..> PedidoDTO : «use»
+  PaymentService ..> PagoDTO : «use»
+  TastingService ..> ReservaDTO : «use»
+  AggregationService ..> ResumenPedido : «use»
+  AggregationService ..> PanelVentas : «use»
+  ResumenPedido ..> PedidoDTO : compone
+  ResumenPedido ..> PagoDTO : compone

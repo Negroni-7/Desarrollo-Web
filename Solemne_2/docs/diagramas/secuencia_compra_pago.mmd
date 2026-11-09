@@ -1,0 +1,42 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente (app / Postman)
+  participant GW as API Gateway
+  participant A as Auth
+  participant O as orders
+  participant I as inventory (gRPC)
+  participant P as payments
+  participant PR as Proveedor (sandbox)
+  participant AN as analytics
+  C->>GW: POST /api/v1/orders {items, entrega} + Idempotency-Key (cookie)
+  GW->>A: introspect(token) [credencial gateway→auth]
+  A-->>GW: {sub, role: CLIENTE, jti}
+  GW->>O: POST /orders + X-User-Id/Role verificados
+  O->>I: QuoteItems(items) — precios oficiales (plazo 1 s)
+  O->>I: ReserveStock(pedidoId, items) — idempotente (plazo 2 s)
+  alt sin stock
+    I-->>O: FAILED_PRECONDITION
+    O-->>C: 409 PRODUCTS_UNAVAILABLE
+  else inventory no responde
+    O->>I: ReleaseReservation (compensación idempotente)
+    O-->>C: 503 sin crear pedido
+  end
+  I-->>O: HELD
+  O-->>C: 201 PENDIENTE_PAGO (vence en 15 min)
+  C->>GW: POST /api/v1/payments {pedidoId}
+  GW->>P: POST /payments
+  P->>O: GET /internal/orders/{id} → monto oficial
+  P->>PR: crear transacción (Api-Key del comercio, desde Vault)
+  P-->>C: redirectUrl
+  C->>PR: paga en la página del proveedor
+  PR->>GW: webhook firmado (HMAC + timestamp + event_id)
+  GW->>P: POST /payments/webhook
+  P->>P: valida firma, descarta event_id repetido, INICIADO→APROBADO, emite boleta
+  P->>O: payment-result {APROBADO, monto}
+  O->>O: PENDIENTE_PAGO→PAGADO (sólo si monto = total)
+  O->>I: CommitReservation(pedidoId)
+  O-)AN: outbox: order.paid (sin datos personales)
+  PR-->>C: redirección a /?pago=id
+  C->>GW: POST /payments/{id}/verify
+  GW->>P: verify → consulta al proveedor servidor a servidor (idempotente)
+  P-->>C: APROBADO + boleta

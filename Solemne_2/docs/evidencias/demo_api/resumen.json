@@ -1,0 +1,443 @@
+[
+ {
+  "paso": 1,
+  "titulo": "Raíz informativa del gateway",
+  "requisito": "—",
+  "servicio": "—",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 2,
+  "titulo": "Catálogo completo (9 vinos del frontend)",
+  "requisito": "R02",
+  "servicio": "S01",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 3,
+  "titulo": "Filtro Tintos (botón del frontend)",
+  "requisito": "R02",
+  "servicio": "S01",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 4,
+  "titulo": "Recomendados (carrusel del frontend)",
+  "requisito": "R03",
+  "servicio": "S01",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 5,
+  "titulo": "Filtro inválido",
+  "requisito": "R02",
+  "servicio": "S01",
+  "esperado": 400,
+  "obtenido": 400,
+  "ok": true
+ },
+ {
+  "paso": 6,
+  "titulo": "Cotizar carrito: 1 Kuyen + 2 Cipreses a Providencia",
+  "requisito": "R04 R05",
+  "servicio": "S02",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 7,
+  "titulo": "Cotizar a regiones (tarifa $6.990)",
+  "requisito": "R05",
+  "servicio": "S02",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 8,
+  "titulo": "Registro de cliente",
+  "requisito": "R07",
+  "servicio": "S03",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 9,
+  "titulo": "Registro de menor de edad (rechazado)",
+  "requisito": "R01",
+  "servicio": "S03",
+  "esperado": 422,
+  "obtenido": 422,
+  "ok": true
+ },
+ {
+  "paso": 10,
+  "titulo": "Login con contraseña incorrecta",
+  "requisito": "R07",
+  "servicio": "S04",
+  "esperado": 401,
+  "obtenido": 401,
+  "ok": true
+ },
+ {
+  "paso": 11,
+  "titulo": "Login correcto (sesión en cookie HttpOnly)",
+  "requisito": "R07",
+  "servicio": "S04",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 12,
+  "titulo": "Consultar sesión",
+  "requisito": "R07",
+  "servicio": "S06",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 13,
+  "titulo": "Guardar dirección en el perfil",
+  "requisito": "R07",
+  "servicio": "S08",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 14,
+  "titulo": "Pedido con total alterado por el cliente (rechazado)",
+  "requisito": "R06",
+  "servicio": "S10",
+  "esperado": 400,
+  "obtenido": 400,
+  "ok": true
+ },
+ {
+  "paso": 15,
+  "titulo": "Crear pedido (stock reservado por gRPC)",
+  "requisito": "R04 R05",
+  "servicio": "S10",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 16,
+  "titulo": "Reintento con la misma Idempotency-Key (mismo pedido)",
+  "requisito": "R06",
+  "servicio": "S10",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 17,
+  "titulo": "Iniciar pago (monto lo fija orders)",
+  "requisito": "R06",
+  "servicio": "S14",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 18,
+  "titulo": "Verificar pago con el proveedor (boleta emitida)",
+  "requisito": "R06 R12",
+  "servicio": "S15",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 19,
+  "titulo": "Reenvío de la misma notificación del proveedor (sin efectos dobles)",
+  "requisito": "R06",
+  "servicio": "S16",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 20,
+  "titulo": "Intentar pagar de nuevo el mismo pedido",
+  "requisito": "R06",
+  "servicio": "S14",
+  "esperado": 409,
+  "obtenido": 409,
+  "ok": true
+ },
+ {
+  "paso": 21,
+  "titulo": "Mis pedidos (una consulta, tres subsistemas)",
+  "requisito": "R12",
+  "servicio": "S11",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 22,
+  "titulo": "Campo restringido clienteId para un cliente",
+  "requisito": "R12",
+  "servicio": "S11",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 23,
+  "titulo": "Registro de un segundo cliente",
+  "requisito": "R07",
+  "servicio": "S03",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 24,
+  "titulo": "Login segundo cliente",
+  "requisito": "R07",
+  "servicio": "S04",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 25,
+  "titulo": "Otro cliente consulta el pedido de Ana (null, sin datos)",
+  "requisito": "R12",
+  "servicio": "S12",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 26,
+  "titulo": "Otro cliente intenta anular el pedido de Ana",
+  "requisito": "R12",
+  "servicio": "S13",
+  "esperado": 404,
+  "obtenido": 404,
+  "ok": true
+ },
+ {
+  "paso": 27,
+  "titulo": "Acceso directo a orders sin identidad de servicio",
+  "requisito": "—",
+  "servicio": "interno",
+  "esperado": 401,
+  "obtenido": 401,
+  "ok": true
+ },
+ {
+  "paso": 28,
+  "titulo": "Ruta interna por el gateway (no publicada)",
+  "requisito": "—",
+  "servicio": "gateway",
+  "esperado": 404,
+  "obtenido": 404,
+  "ok": true
+ },
+ {
+  "paso": 29,
+  "titulo": "Paquetes del frontend",
+  "requisito": "R08",
+  "servicio": "S17",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 30,
+  "titulo": "Cupos por horario",
+  "requisito": "R08",
+  "servicio": "S18",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 31,
+  "titulo": "Reservar Maridaje Gourmet para 4",
+  "requisito": "R08",
+  "servicio": "S19",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 32,
+  "titulo": "Mis reservas",
+  "requisito": "R08",
+  "servicio": "S20",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 33,
+  "titulo": "Mensaje del formulario de contacto",
+  "requisito": "R09",
+  "servicio": "S22",
+  "esperado": 201,
+  "obtenido": 201,
+  "ok": true
+ },
+ {
+  "paso": 34,
+  "titulo": "Login administrador",
+  "requisito": "R11",
+  "servicio": "S04",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 35,
+  "titulo": "Cliente intenta administrar productos (denegado)",
+  "requisito": "R11",
+  "servicio": "S23",
+  "esperado": 403,
+  "obtenido": 403,
+  "ok": true
+ },
+ {
+  "paso": 36,
+  "titulo": "Inventario con stock",
+  "requisito": "R11",
+  "servicio": "S23",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 37,
+  "titulo": "Ingreso de bodega +6 Almaviva",
+  "requisito": "R11",
+  "servicio": "S26",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 38,
+  "titulo": "Pedidos pagados",
+  "requisito": "R11",
+  "servicio": "S28",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 39,
+  "titulo": "Despacho → EN_PREPARACION",
+  "requisito": "R11 R12",
+  "servicio": "S29",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 40,
+  "titulo": "Despacho → DESPACHADO",
+  "requisito": "R11 R12",
+  "servicio": "S29",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 41,
+  "titulo": "Despacho → ENTREGADO",
+  "requisito": "R11 R12",
+  "servicio": "S29",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 42,
+  "titulo": "Transición inválida (ENTREGADO → EN_PREPARACION)",
+  "requisito": "R11",
+  "servicio": "S29",
+  "esperado": 409,
+  "obtenido": 409,
+  "ok": true
+ },
+ {
+  "paso": 43,
+  "titulo": "Mensajes de contacto pendientes",
+  "requisito": "R09",
+  "servicio": "S32",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 44,
+  "titulo": "Panel de ventas GraphQL (analytics + inventory)",
+  "requisito": "R13",
+  "servicio": "S34",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 45,
+  "titulo": "Login sommelier",
+  "requisito": "R08",
+  "servicio": "S04",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 46,
+  "titulo": "Sommelier ve reservas con comentarios",
+  "requisito": "R08",
+  "servicio": "S30",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 47,
+  "titulo": "Sommelier intenta ver pedidos (denegado)",
+  "requisito": "R11",
+  "servicio": "S28",
+  "esperado": 403,
+  "obtenido": 403,
+  "ok": true
+ },
+ {
+  "paso": 48,
+  "titulo": "Cerrar sesión",
+  "requisito": "R07",
+  "servicio": "S05",
+  "esperado": 200,
+  "obtenido": 200,
+  "ok": true
+ },
+ {
+  "paso": 49,
+  "titulo": "Operación tras cerrar sesión",
+  "requisito": "R07",
+  "servicio": "S07",
+  "esperado": 401,
+  "obtenido": 401,
+  "ok": true
+ }
+]

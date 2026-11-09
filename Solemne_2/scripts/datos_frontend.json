@@ -1,0 +1,215 @@
+{
+  "_origen": "Extraído automáticamente de Entrega_Frontend/index.html (frontend v1.0) por scripts/extraer_datos_frontend.py",
+  "_nota": "stockInicial no existe en el frontend: lo define el backend. 'recomendado' sale del carrusel #recomendados.",
+  "vinos": [
+    {
+      "id": "kuyen-tinto",
+      "nombre": "Kuyen (blend tinto)",
+      "tipo": "tinto",
+      "vina": "Viña Antiyal",
+      "volumenMl": 750,
+      "gradoAlcohol": 14.5,
+      "precio": 32000,
+      "imagen": "images/vinos/kuyen-tinto.jpg",
+      "recomendado": true,
+      "stockInicial": 24
+    },
+    {
+      "id": "pinot-rosado",
+      "nombre": "Pinot Noir Rosé",
+      "tipo": "rosado",
+      "vina": "Viña Leyda",
+      "volumenMl": 750,
+      "gradoAlcohol": 12.5,
+      "precio": 16900,
+      "imagen": "images/vinos/pinot-rosado.jpg",
+      "recomendado": false,
+      "stockInicial": 30
+    },
+    {
+      "id": "purafe-tinto",
+      "nombre": "Pura Fe Carmenere",
+      "tipo": "tinto",
+      "vina": "Viña Antiyal",
+      "volumenMl": 750,
+      "gradoAlcohol": 14.0,
+      "precio": 22900,
+      "imagen": "images/vinos/purafe-tinto.jpg",
+      "recomendado": true,
+      "stockInicial": 36
+    },
+    {
+      "id": "chardonay-rosado",
+      "nombre": "Chardonnay Reserva",
+      "tipo": "rosado",
+      "vina": "Viña Echeverría",
+      "volumenMl": 750,
+      "gradoAlcohol": 13.5,
+      "precio": 18500,
+      "imagen": "images/vinos/chardonay-rosado.jpg",
+      "recomendado": true,
+      "stockInicial": 30
+    },
+    {
+      "id": "cipreses-blanco",
+      "nombre": "Cipreses Vineyard Sauvignon Blanc",
+      "tipo": "blanco",
+      "vina": "Viña Casa Marín",
+      "volumenMl": 750,
+      "gradoAlcohol": 13.5,
+      "precio": 24900,
+      "imagen": "images/vinos/cipreses-blanco.webp",
+      "recomendado": true,
+      "stockInicial": 20
+    },
+    {
+      "id": "riesling-blanco",
+      "nombre": "Riesling Miramar Vineyard",
+      "tipo": "blanco",
+      "vina": "Viña Casa Marín",
+      "volumenMl": 750,
+      "gradoAlcohol": 12.5,
+      "precio": 27500,
+      "imagen": "images/vinos/riesling-blanco.avif",
+      "recomendado": false,
+      "stockInicial": 18
+    },
+    {
+      "id": "almaviva-especial",
+      "nombre": "Almaviva",
+      "tipo": "especial",
+      "vina": "Viña Almaviva",
+      "volumenMl": 750,
+      "gradoAlcohol": 15.0,
+      "precio": 135000,
+      "imagen": "images/vinos/almaviva-especial.jpg",
+      "recomendado": true,
+      "stockInicial": 6
+    },
+    {
+      "id": "chadwick-especial",
+      "nombre": "Viñedo Chadwick",
+      "tipo": "especial",
+      "vina": "Viña Errázuriz",
+      "volumenMl": 750,
+      "gradoAlcohol": 14.0,
+      "precio": 260000,
+      "imagen": "images/vinos/chadwick-especial.webp",
+      "recomendado": false,
+      "stockInicial": 4
+    },
+    {
+      "id": "clos-especial",
+      "nombre": "Clos Apalta",
+      "tipo": "especial",
+      "vina": "Viña Lapostolle",
+      "volumenMl": 750,
+      "gradoAlcohol": 14.5,
+      "precio": 150000,
+      "imagen": "images/vinos/clos-especial.webp",
+      "recomendado": true,
+      "stockInicial": 5
+    }
+  ],
+  "paquetes": [
+    {
+      "id": "iniciacion-cata",
+      "nombre": "Iniciación a la cata",
+      "descripcion": "Descubre el vino a tu ritmo, junto a un sommelier que te guía en cada copa.",
+      "incluye": [
+        "4 vinos seleccionados",
+        "Duración: 1 hora",
+        "Guía de cata incluida",
+        "Tabla de quesos y pan artesanal"
+      ],
+      "duracionMin": 60,
+      "precioPorPersona": 15000,
+      "imagen": "images/paquete1.jpg"
+    },
+    {
+      "id": "maridaje-gourmet",
+      "nombre": "Maridaje Gourmet",
+      "descripcion": "Una velada donde cada vino encuentra su bocado perfecto.",
+      "incluye": [
+        "5 vinos maridados",
+        "Duración: 1,5 horas",
+        "Ficha técnica de cada vino para llevar",
+        "Asesoría de maridaje personalizada"
+      ],
+      "duracionMin": 90,
+      "precioPorPersona": 28000,
+      "imagen": "images/paquete2.jpg"
+    },
+    {
+      "id": "edicion-limitada",
+      "nombre": "Edición Limitada",
+      "descripcion": "Un momento íntimo con etiquetas exclusivas y su historia.",
+      "incluye": [
+        "4 vinos premium/limitados",
+        "Duración: 2 horas",
+        "Cata dirigida por el sommelier",
+        "Copa Viña Urbana de regalo"
+      ],
+      "duracionMin": 120,
+      "precioPorPersona": 55000,
+      "imagen": "images/paquete3.jpg"
+    }
+  ],
+  "formularios": {
+    "horasReserva": [
+      "10:00",
+      "12:00",
+      "16:00",
+      "18:00",
+      "20:00"
+    ],
+    "personasReserva": [
+      "2 personas",
+      "3-4 personas",
+      "5-6 personas",
+      "7-8 personas",
+      "Más de 8 personas"
+    ],
+    "asuntosContacto": [
+      "Consulta sobre vinos",
+      "Pedido especial",
+      "Degustación privada",
+      "Otro"
+    ],
+    "campos": {
+      "registro": [
+        "Nombre",
+        "Teléfono",
+        "Email",
+        "Contraseña"
+      ],
+      "login": [
+        "Email",
+        "Contraseña"
+      ],
+      "reserva": [
+        "Nombre completo",
+        "Email",
+        "Teléfono",
+        "Paquete",
+        "Fecha preferida",
+        "Hora preferida",
+        "Cantidad de personas",
+        "Comentarios adicionales"
+      ],
+      "contacto": [
+        "Nombre",
+        "Email",
+        "Asunto",
+        "Mensaje"
+      ]
+    }
+  },
+  "reglas": {
+    "envioGratisDesde": 50000,
+    "comunaEnvioGratis": "Providencia",
+    "diasEntrega": "2-5",
+    "edadMinima": 18,
+    "mediosDePago": "Visa, Mastercard y Amex"
+  }
+}

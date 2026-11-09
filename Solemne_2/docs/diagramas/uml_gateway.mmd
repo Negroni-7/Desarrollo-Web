@@ -1,0 +1,130 @@
+---
+title: UML del API Gateway, políticas, secretos y GraphQL Gateway
+---
+classDiagram
+  direction TB
+  class ApiGateway {
+    <<component · edge>>
+    +host: localhost:8443
+    +tls: Certificado
+    +base: /api/v1
+    +handle(req) Response
+    +match(verbo, ruta) RouteDefinition
+    -proxy(ruta, identidad) Response
+  }
+  class RouteDefinition {
+    <<config>>
+    +sid: String
+    +method: Verbo
+    +external: Patron
+    +access: Acceso
+    +roles: Rol[]
+    +internal: Plantilla
+    +query: String[]
+    +headers: String[]
+    +rate: ClaseLimite
+    +timeout: s
+    +maxBody: bytes
+  }
+  class ServiceTarget {
+    <<config>>
+    +nombre: String
+    +baseUrl: https://svc:8000
+    +tls: CA interna
+  }
+  class AuthenticationPolicy {
+    <<policy>>
+    +cookie: vu_session
+    +bearer: opcional
+    +authenticate(req) Identidad?
+  }
+  class AuthorizationPolicy {
+    <<policy>>
+    +authorize(identidad, ruta) bool
+  }
+  class RequestPolicy {
+    <<policy>>
+    +csrf: X-Requested-With
+    +rateLimits: Map
+    +maxBody
+    +stripHeaders
+    +check(req, ruta) Error?
+  }
+  class AuthServiceClient {
+    <<adapter>>
+    +introspect(token) Identidad
+  }
+  class Identidad {
+    <<value>>
+    +sub: UUID
+    +role: Rol
+    +jti: UUID
+  }
+  class SecretProvider {
+    <<interface · Vault>>
+    +addr: https://vault:8200
+    -tokenFile: Path
+    +cacheSeconds: 60
+    +read(ruta, force) Secreto
+  }
+  class CallerVerifier {
+    <<en cada microservicio>>
+    +llamadoresPermitidos: Set
+    +require_caller(...) Contexto
+  }
+  class GraphQLGateway {
+    <<component · privado>>
+    +maxDepth: 4
+    +maxCost: 2500
+    +introspection: false
+    +batching: false
+    +execute(op, ctx) Resultado
+  }
+  class Schema {
+    <<graphql>>
+    +Query: misPedidos, resumenPedido, panelVentas
+  }
+  class Resolver {
+    <<graphql>>
+    +resolve(parent, args, ctx)
+    +requireRole(roles)
+  }
+  class DataLoader {
+    <<batching>>
+    +maxBatch: 100
+    +load(id)
+    -batch(ids)
+  }
+  class SubsystemAdapter {
+    <<adapter REST>>
+    +target: orders/inventory/payments/analytics
+    +timeout: 3 s
+    +call(ruta, ctx) JSON
+  }
+  class InventoryGrpcClient {
+    <<gRPC · orders>>
+    +target: inventory:50051
+    +mTLS: cert orders
+    +quote() 1s
+    +reserve() 2s
+    +commit() 2s
+    +release() 2s
+  }
+  ApiGateway "1" *-- "1..*" RouteDefinition : publica
+  RouteDefinition "0..*" --> "1" ServiceTarget : destino
+  ApiGateway "1" --> "1" AuthenticationPolicy : aplica
+  ApiGateway "1" --> "1" AuthorizationPolicy : aplica
+  ApiGateway "1" --> "1" RequestPolicy : aplica
+  AuthenticationPolicy ..> AuthServiceClient : «use»
+  AuthServiceClient ..> Identidad : «create»
+  AuthorizationPolicy ..> RouteDefinition : roles
+  ApiGateway ..> SecretProvider : credencial por tramo
+  ServiceTarget ..> CallerVerifier : verifica
+  GraphQLGateway "1" *-- "1" Schema
+  Schema "1" *-- "1..*" Resolver
+  Resolver ..> DataLoader : «use»
+  Resolver ..> SubsystemAdapter : «use»
+  DataLoader ..> SubsystemAdapter : lote
+  SubsystemAdapter ..> SecretProvider : credencial
+  GraphQLGateway ..> SecretProvider : verifica gateway
+  InventoryGrpcClient ..> SecretProvider : (sin TLS)

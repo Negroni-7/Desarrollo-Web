@@ -1,0 +1,206 @@
+# Viña Urbana - despliegue reproducible.
+# Antes:  python scripts/setup.py      (genera .env aleatorio, certificados y carpetas)
+# Luego:  docker compose up --build    → API en https://localhost:8443/api/v1
+# Pruebas: docker compose --profile test run --rm tests
+#
+# Redes:
+#   edge     → única red con puertos publicados (gateway :8443 y proveedor sandbox :8090)
+#   backend  → interna: gateway, graphql y microservicios (sin acceso desde el host)
+#   data     → interna: MongoDB y los servicios dueños de una base
+#   secrets  → interna: Vault y quienes leen secretos
+#   egress   → salida hacia el proveedor de pagos (payments ↔ sandbox)
+
+x-py: &py
+  build:
+    context: ./backend
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  depends_on:
+    vault-init:
+      condition: service_completed_successfully
+  networks: [backend, data, secrets]
+
+x-env: &env
+  PORT: "8000"
+  VAULT_ADDR: https://vault:8200
+  VAULT_CACERT: /certs/ca.crt
+  VAULT_TOKEN_FILE: /vault-token/vault-token
+  TLS_ENABLED: "true"
+  TLS_CA_FILE: /certs/ca.crt
+  TLS_CERT_FILE: /certs/tls.crt
+  TLS_KEY_FILE: /certs/tls.key
+  AUTH_URL: https://auth:8000
+  CLIENTS_URL: https://clients:8000
+  INVENTORY_URL: https://inventory:8000
+  ORDERS_URL: https://orders:8000
+  PAYMENTS_URL: https://payments:8000
+  TASTINGS_URL: https://tastings:8000
+  ANALYTICS_URL: https://analytics:8000
+  GRAPHQL_URL: https://graphql:8000
+
+services:
+  mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    command: ["mongod", "--auth", "--tlsMode", "requireTLS", "--tlsCertificateKeyFile", "/certs/mongo.pem",
+              "--tlsCAFile", "/certs/ca.crt", "--tlsAllowConnectionsWithoutCertificates"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+      - ./runtime/certs/mongo:/certs:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--tls", "--tlsCAFile", "/certs/ca.crt", "--host", "localhost", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      retries: 10
+    networks: [data]
+
+  vault:
+    image: hashicorp/vault:1.20
+    restart: unless-stopped
+    command: ["server", "-dev", "-dev-root-token-id=${VAULT_ROOT_TOKEN}", "-dev-listen-address=127.0.0.1:8201",
+              "-config=/vault/config/vault.hcl"]
+    volumes:
+      - ./backend/vault/vault.hcl:/vault/config/vault.hcl:ro
+      - ./runtime/certs/vault:/certs:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8201/v1/sys/health"]
+      interval: 5s
+      retries: 20
+    networks: [secrets]
+
+  # Arranque: secretos aleatorios, políticas, tokens por servicio, usuarios de Mongo y datos ficticios.
+  vault-init:
+    build: { context: ./backend, dockerfile: Dockerfile.tools }
+    command: ["sh", "-c", "python /scripts/vault_init.py && python /scripts/seed_data.py"]
+    environment:
+      VAULT_ADDR: https://vault:8200
+      VAULT_CACERT: /certs/ca.crt
+      VAULT_ROOT_TOKEN: ${VAULT_ROOT_TOKEN}
+      TOKENS_DIR: /tokens
+      MONGO_ADMIN_HOST: mongo:27017
+      MONGO_SERVICE_HOST: mongo:27017
+      MONGO_TLS_CA: /certs/ca.crt
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD}
+      SEED_SOMMELIER_PASSWORD: ${SEED_SOMMELIER_PASSWORD}
+      SEED_CLIENT_PASSWORD: ${SEED_CLIENT_PASSWORD}
+      SEED_CREDENTIALS_FILE: /seed-out/seed_credentials.txt
+      TRANSBANK_COMMERCE_CODE: ${TRANSBANK_COMMERCE_CODE:-}
+      TRANSBANK_API_KEY: ${TRANSBANK_API_KEY:-}
+    volumes:
+      - ./scripts:/scripts:ro
+      - ./runtime/tokens:/tokens
+      - ./runtime/seed-out:/seed-out
+      - ./runtime/certs/ca.crt:/certs/ca.crt:ro
+    depends_on:
+      vault: { condition: service_healthy }
+      mongo: { condition: service_healthy }
+    networks: [data, secrets]
+
+  auth:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: auth } }
+    environment: { <<: *env, SERVICE_NAME: auth }
+    volumes: ["./runtime/certs/auth:/certs:ro", "./runtime/tokens/auth:/vault-token:ro"]
+
+  clients:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: clients } }
+    environment: { <<: *env, SERVICE_NAME: clients }
+    volumes: ["./runtime/certs/clients:/certs:ro", "./runtime/tokens/clients:/vault-token:ro"]
+
+  inventory:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: inventory } }
+    environment: { <<: *env, SERVICE_NAME: inventory, GRPC_PORT: "50051" }
+    volumes: ["./runtime/certs/inventory:/certs:ro", "./runtime/tokens/inventory:/vault-token:ro"]
+
+  orders:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: orders } }
+    environment: { <<: *env, SERVICE_NAME: orders, INVENTORY_GRPC: "inventory:50051",
+                   PAYMENT_WINDOW_SECONDS: "${PAYMENT_WINDOW_SECONDS:-900}", SWEEP_INTERVAL_SECONDS: "${SWEEP_INTERVAL_SECONDS:-10}" }
+    volumes: ["./runtime/certs/orders:/certs:ro", "./runtime/tokens/orders:/vault-token:ro"]
+
+  payments:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: payments } }
+    environment: { <<: *env, SERVICE_NAME: payments, PROVIDER_API_URL: "https://sandbox:8000",
+                   PAYMENT_RETURN_URL: "${PUBLIC_GATEWAY_URL}/", PAYMENT_PROVIDER: "${PAYMENT_PROVIDER:-sandbox}" }
+    volumes: ["./runtime/certs/payments:/certs:ro", "./runtime/tokens/payments:/vault-token:ro"]
+    networks: [backend, data, secrets, egress]
+
+  tastings:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: tastings } }
+    environment: { <<: *env, SERVICE_NAME: tastings }
+    volumes: ["./runtime/certs/tastings:/certs:ro", "./runtime/tokens/tastings:/vault-token:ro"]
+
+  analytics:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: analytics } }
+    environment: { <<: *env, SERVICE_NAME: analytics }
+    volumes: ["./runtime/certs/analytics:/certs:ro", "./runtime/tokens/analytics:/vault-token:ro"]
+
+  graphql:
+    build: { context: ./backend/gql-gateway }
+    restart: unless-stopped
+    environment: { <<: *env, SERVICE_NAME: graphql, NODE_EXTRA_CA_CERTS: /certs/ca.crt, GRAPHQL_INTROSPECTION: "false" }
+    volumes: ["./runtime/certs/graphql:/certs:ro", "./runtime/tokens/graphql:/vault-token:ro"]
+    depends_on:
+      vault-init: { condition: service_completed_successfully }
+    networks: [backend, secrets]
+
+  gateway:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: gateway } }
+    environment: { <<: *env, SERVICE_NAME: gateway, PORT: "8443" }
+    volumes: ["./runtime/certs/gateway:/certs:ro", "./runtime/tokens/gateway:/vault-token:ro"]
+    ports: ["8443:8443"]
+    networks: [edge, backend, secrets]
+
+  # Proveedor de pagos simulado (representa a un tercero externo).
+  sandbox:
+    <<: *py
+    build: { context: ./backend, args: { SERVICE: sandbox } }
+    environment: { <<: *env, SERVICE_NAME: sandbox, SANDBOX_PUBLIC_URL: "${PUBLIC_SANDBOX_URL}",
+                   MERCHANT_WEBHOOK_URL: "https://gateway:8443/api/v1/payments/webhook", ALLOWED_RETURN_HOSTS: "localhost,127.0.0.1" }
+    volumes: ["./runtime/certs/sandbox:/certs:ro", "./runtime/tokens/sandbox:/vault-token:ro"]
+    ports: ["8090:8000"]
+    networks: [edge, egress, data, secrets]
+
+  # Pruebas automatizadas (perfil opcional).
+  tests:
+    profiles: ["test"]
+    build: { context: ./backend, dockerfile: Dockerfile.tools }
+    command: ["pytest", "-v", "/tests", "--junitxml=/results/junit.xml"]
+    environment:
+      GATEWAY_URL: https://gateway:8443
+      SANDBOX_URL: https://sandbox:8000
+      CA_FILE: /certs/ca.crt
+      SEED_CREDENTIALS_FILE: /seed-out/seed_credentials.txt
+      INTERNAL_URLS: "inventory=https://inventory:8000,orders=https://orders:8000,auth=https://auth:8000,payments=https://payments:8000,graphql=https://graphql:8000,clients=https://clients:8000"
+      CERTS_DIR: /runtime/certs
+      INVENTORY_GRPC: inventory:50051
+    volumes:
+      - ./tests:/tests:ro
+      - ./scripts:/scripts:ro                      # datos_frontend.json (pruebas D01-D07)
+      - ./backend:/backend:ro                      # stubs gRPC para las pruebas V5/R05/R06
+      - ./runtime/seed-out:/seed-out:ro
+      - ./runtime/certs:/runtime/certs:ro          # certificados de cliente para pruebas mTLS
+      - ./runtime/certs/ca.crt:/certs/ca.crt:ro
+      - ./runtime/test-results:/results
+    networks: [edge, backend]
+
+networks:
+  edge: {}
+  egress: {}
+  backend: { internal: true }
+  data: { internal: true }
+  secrets: { internal: true }
+
+volumes:
+  mongo-data: {}
